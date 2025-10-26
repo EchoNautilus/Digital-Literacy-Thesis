@@ -52,14 +52,24 @@
 
 <script>
 document.getElementById('download').addEventListener('click', function(){
+  // fields and header
   const fields = ['name','age','q1','q2','q3','q4'];
   const header = fields.join(',');
+
+  // collect values (escape quotes)
   const values = fields.map(id=>{
     const el = document.getElementById(id);
-    return '"' + (el ? el.value.replace(/"/g,'""') : '') + '"';
+    const val = el ? el.value : '';
+    return '"' + String(val).replace(/"/g,'""') + '"';
   }).join(',');
-  const csv = header + "\\n" + values + "\\n";
-  const blob = new Blob([csv], {type: 'text/csv'});
+
+  // Use CRLF for Excel compatibility, add UTF-8 BOM
+  const CRLF = '\r\n';
+  const bom = '\uFEFF';
+  const csv = header + CRLF + values + CRLF;
+  const blob = new Blob([bom + csv], {type: 'text/csv;charset=utf-8;'});
+
+  // create download link
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = 'survey_response_demo.csv';
