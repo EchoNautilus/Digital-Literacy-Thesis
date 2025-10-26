@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tech Literacy Survey (Demo)</title>
+  <style>
+    body{font-family: Arial, sans-serif; max-width:720px;margin:20px auto;padding:10px}
+    label{display:block;margin:10px 0 4px}
+    textarea, input[type=text], select{width:100%;padding:8px}
+    .btn{margin-top:12px;padding:8px 14px}
+  </style>
+</head>
+<body>
+  <h2>Tech Literacy Survey — Demo</h2>
+  <p>(Demo; responses download as CSV)</p>
+  <label>Name (optional)</label>
+  <input id="name" type="text" placeholder="optional">
+  <label>Age range</label>
+  <select id="age"><option>Under 18</option><option>18-25</option><option>26-35</option><option>36-50</option><option>50+</option></select>
+
+  <h3>Sample Items (select best answer)</h3>
+
+  <label>1. When you need factual info online, you:</label>
+  <select id="q1">
+    <option>Use quick social media posts (e.g. WhatsApp/Facebook)</option>
+    <option>Search using a search engine and check a few sources</option>
+    <option>Compare multiple official sources and cross-check</option>
+  </select>
+
+  <label>2. When sharing files with others, you:</label>
+  <select id="q2">
+    <option>Send files without thinking about privacy</option>
+    <option>Use common apps and check recipients</option>
+    <option>Use secure sharing and check permissions carefully</option>
+  </select>
+
+  <label>3. You can create a simple document (resume, letter):</label>
+  <select id="q3">
+    <option>Not comfortable</option>
+    <option>Yes, with templates</option>
+    <option>Yes, from scratch and format well</option>
+  </select>
+
+  <label>4. If your device has a problem, you:</label>
+  <select id="q4">
+    <option>Ask someone else to fix it</option>
+    <option>Try common fixes (restart, settings)</option>
+    <option>Troubleshoot and fix using guides</option>
+  </select>
+
+  <button class="btn" id="download">Download CSV</button>
+
+<script>
+document.getElementById('download').addEventListener('click', function(){
+  const fields = ['name','age','q1','q2','q3','q4'];
+  const header = fields.join(',');
+  const values = fields.map(id=>{
+    const el = document.getElementById(id);
+    return '"' + (el ? el.value.replace(/"/g,'""') : '') + '"';
+  }).join(',');
+  const csv = header + "\\n" + values + "\\n";
+  const blob = new Blob([csv], {type: 'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'survey_response_demo.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  alert('CSV downloaded (demo). You can open it in Excel.');
+});
+</script>
+</body>
+</html>
